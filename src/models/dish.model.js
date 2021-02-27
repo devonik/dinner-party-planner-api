@@ -3,15 +3,33 @@ const { toJSON } = require('./plugins');
 
 const dishSchema = mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
       required: true,
       unique: true,
       trim: true,
     },
+    subtitle: {
+      type: String,
+      trim: true,
+    },
     description: {
       type: String,
       trim: true,
+    },
+    imageUrl: {
+      type: String,
+      trim: true,
+    },
+    ingredients: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Ingredient',
+      },
+    ],
+    createdByUserId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
     },
   },
   {
@@ -23,12 +41,12 @@ const dishSchema = mongoose.Schema(
 dishSchema.plugin(toJSON);
 
 /**
- * Check if email is taken
- * @param {string} email - The dish's name
+ * Check if title is taken
+ * @param {string} title - The dish's title
  * @returns {Promise<boolean>}
  */
-dishSchema.statics.isNameTaken = async function (name, excludeDishId) {
-  const dish = await this.findOne({ name, _id: { $ne: excludeDishId } });
+dishSchema.statics.isTitleTaken = async function (title, excludeDishId) {
+  const dish = await this.findOne({ title, _id: { $ne: excludeDishId } });
   return !!dish;
 };
 

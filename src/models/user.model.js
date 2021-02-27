@@ -3,8 +3,6 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 const { roles } = require('../config/roles');
-// Create a token generator with the default settings:
-const randToken = require('rand-token');
 
 const userSchema = mongoose.Schema(
   {
@@ -41,12 +39,6 @@ const userSchema = mongoose.Schema(
       type: String,
       enum: roles,
       default: 'cook',
-    },
-    invitationCode: {
-      type: String,
-      default: function () {
-        return randToken.generate(6);
-      },
     },
   },
   {

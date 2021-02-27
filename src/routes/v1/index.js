@@ -5,6 +5,9 @@ const dishRoute = require('./dish.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 
+//Test
+const testRoute = require('./test.route');
+
 const router = express.Router();
 
 const defaultRoutes = [
@@ -27,6 +30,10 @@ const devRoutes = [
   {
     path: '/docs',
     route: docsRoute,
+  },
+  {
+    path: '/test',
+    route: testRoute,
   },
 ];
 

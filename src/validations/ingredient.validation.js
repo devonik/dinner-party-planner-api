@@ -1,50 +1,49 @@
 const Joi = require('joi');
 const { objectId } = require('./custom.validation');
 
-const createDish = {
+const create = {
   body: Joi.object().keys({
     title: Joi.string().required(),
     subtitle: Joi.string().optional(),
-    description: Joi.string().optional(),
-    createdByUserId: Joi.string().custom(objectId),
+    imageUrl: Joi.string().optional(),
   }),
 };
 
-const getDishes = {
+const getAll = {
   query: Joi.object().keys({
     title: Joi.string(),
   }),
 };
 
-const getDish = {
+const getById = {
   params: Joi.object().keys({
-    dishId: Joi.string().custom(objectId),
+    id: Joi.string().custom(objectId),
   }),
 };
 
-const updateDish = {
+const update = {
   params: Joi.object().keys({
-    dishId: Joi.required().custom(objectId),
+    id: Joi.required().custom(objectId),
   }),
   body: Joi.object()
     .keys({
       title: Joi.string(),
       subtitle: Joi.string(),
-      description: Joi.string(),
+      imageUrl: Joi.string(),
     })
     .min(1),
 };
 
-const deleteDish = {
+const deleteById = {
   params: Joi.object().keys({
-    dishId: Joi.string().custom(objectId),
+    id: Joi.string().custom(objectId),
   }),
 };
 
 module.exports = {
-  createDish,
-  getDishes,
-  getDish,
-  updateDish,
-  deleteDish,
+  create,
+  getAll,
+  getById,
+  update,
+  deleteById,
 };

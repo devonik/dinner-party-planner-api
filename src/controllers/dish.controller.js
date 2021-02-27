@@ -1,11 +1,10 @@
 const httpStatus = require('http-status');
-const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { dishService } = require('../services');
 
 const createDish = catchAsync(async (req, res) => {
-  const dish = await dishService.createDish(req.body);
+  const dish = await dishService.createDish(req.body, req.user);
   res.status(httpStatus.CREATED).send(dish);
 });
 

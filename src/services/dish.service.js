@@ -7,10 +7,12 @@ const ApiError = require('../utils/ApiError');
  * @param {Object} dishBody
  * @returns {Promise<Dish>}
  */
-const createDish = async (dishBody) => {
-  if (await Dish.isNameTaken(dishBody.name)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Dish name is already taken');
+const createDish = async (dishBody, user) => {
+  if (await Dish.isTitleTaken(dishBody.title)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Dish title is already taken');
   }
+
+  dishBody.createdByUserId = user.id;
   const dish = await Dish.create(dishBody);
   return dish;
 };
@@ -33,12 +35,12 @@ const getDishById = async (id) => {
 };
 
 /**
- * Get dish by name
- * @param {string} name
+ * Get dish by title
+ * @param {string} title
  * @returns {Promise<Dish>}
  */
-const getDishByEmail = async (name) => {
-  return Dish.findOne({ name });
+const getDishByTitle = async (title) => {
+  return Dish.findOne({ title });
 };
 
 /**
@@ -52,8 +54,8 @@ const updateDishById = async (dishId, updateBody) => {
   if (!dish) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Dish not found');
   }
-  if (updateBody.name && (await Dish.isNameTaken(updateBody.name, dishId))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Dish name already taken');
+  if (updateBody.title && (await Dish.isTitleTaken(updateBody.title, dishId))) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Dish title already taken');
   }
   Object.assign(dish, updateBody);
   await dish.save();
@@ -78,7 +80,7 @@ module.exports = {
   createDish,
   getDishes,
   getDishById,
-  getDishByEmail,
+  getDishByTitle,
   updateDishById,
   deleteDishById,
 };
