@@ -22,7 +22,7 @@ const createDish = async (dishBody, user) => {
  * @returns {Promise<Dish>}
  */
 const getDishes = async () => {
-  return Dish.find();
+  return Dish.find().populate('ingredients');
 };
 
 /**

@@ -1,9 +1,12 @@
 const express = require('express');
 const authRoute = require('./auth.route');
-const userRoute = require('./user.route');
-const dishRoute = require('./dish.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
+
+//Data
+const userRoute = require('./user.route');
+const dishRoute = require('./dish.route');
+const ingredientRoute = require('./ingredient.route');
 
 //Test
 const testRoute = require('./test.route');
@@ -22,6 +25,10 @@ const defaultRoutes = [
   {
     path: '/dish',
     route: dishRoute,
+  },
+  {
+    path: '/ingredient',
+    route: ingredientRoute,
   },
 ];
 

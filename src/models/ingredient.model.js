@@ -17,7 +17,11 @@ const schema = mongoose.Schema(
       type: String,
       trim: true,
     },
-    createdByUser: {
+    dishId: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Dish',
+    },
+    createdByUserId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
     },

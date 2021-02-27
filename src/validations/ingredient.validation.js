@@ -6,6 +6,8 @@ const create = {
     title: Joi.string().required(),
     subtitle: Joi.string().optional(),
     imageUrl: Joi.string().optional(),
+    dishId: Joi.string().required().custom(objectId),
+    createdByUserId: Joi.string().custom(objectId),
   }),
 };
 
@@ -30,6 +32,7 @@ const update = {
       title: Joi.string(),
       subtitle: Joi.string(),
       imageUrl: Joi.string(),
+      dishId: Joi.string().custom(objectId),
     })
     .min(1),
 };

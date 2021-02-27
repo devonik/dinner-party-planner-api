@@ -8,3 +8,4 @@ module.exports.emailService = require('./email.service');
 //data
 module.exports.userService = require('./user.service');
 module.exports.dishService = require('./dish.service');
+module.exports.ingredientService = require('./ingredient.service');

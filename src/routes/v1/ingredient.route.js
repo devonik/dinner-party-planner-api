@@ -1,39 +1,39 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const dishValidation = require('../../validations/dish.validation');
-const dishController = require('../../controllers/dish.controller');
+const validation = require('../../validations/ingredient.validation');
+const controller = require('../../controllers/ingredient.controller');
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(auth('manageDishes'), validate(dishValidation.createDish), dishController.createDish)
-  .get(validate(dishValidation.getDishes), dishController.getDishes);
+  .post(auth('manageIngredients'), validate(validation.create), controller.create)
+  .get(validate(validation.getAll), controller.getAll);
 
 router
-  .route('/:dishId')
-  .get(validate(dishValidation.getDish), dishController.getDish)
-  .patch(auth('manageDishes'), validate(dishValidation.updateDish), dishController.updateDish)
-  .delete(auth('manageDishes'), validate(dishValidation.deleteDish), dishController.deleteDish);
+  .route('/:id')
+  .get(validate(validation.getById), controller.getById)
+  .patch(auth('manageIngredients'), validate(validation.update), controller.updateById)
+  .delete(auth('manageIngredients'), validate(validation.deleteById), controller.deleteById);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: Dishes
- *   description: Dish management and retrieval
+ *   name: Ingredients
+ *   description: Ingredient management and retrieval
  */
 
 /**
  * @swagger
  * path:
- *  /dishs:
+ *  /ingredients:
  *    post:
- *      summary: Create a dish
- *      description: The dish will be created by cooks.
- *      tags: [Dishes]
+ *      summary: Create a ingredient
+ *      description: The ingredient will be created by cooks.
+ *      tags: [Ingredients]
  *      security:
  *        - bearerAuth: []
  *      requestBody:
@@ -45,7 +45,6 @@ module.exports = router;
  *              required:
  *                - title
  *                - subtitle
- *                - description
  *                - imageUrl
  *              properties:
  *                title:
@@ -58,17 +57,16 @@ module.exports = router;
  *                imageUrl:
  *                  type: string
  *              example:
- *                title: Pizza
- *                subtitle: American style
- *                description: American style pizza is awesome
- *                imageUrl: https://banner2.cleanpng.com/20171220/oqe/pizza-png-image-5a3ab839564e57.89039813151379768935351034.jpg
+ *                title: Tomato
+ *                subtitle: It's red
+ *                imageUrl: https://png.pngtree.com/png-clipart/20190925/original/pngtree-red-tomato-png-image_4983241.jpg
  *      responses:
  *        "201":
  *          description: Created
  *          content:
  *            application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Dish'
+ *                 $ref: '#/components/schemas/Ingredient'
  *        "400":
  *          $ref: '#/components/responses/DuplicateTitle'
  *        "401":
@@ -77,15 +75,15 @@ module.exports = router;
  *          $ref: '#/components/responses/Forbidden'
  *
  *    get:
- *      summary: Get all dishes
- *      description: Anyone can get all dishes.
- *      tags: [Dishes]
+ *      summary: Get all ingredientes
+ *      description: Anyone can get all ingredientes.
+ *      tags: [Ingredients]
  *      parameters:
  *        - in: query
  *          name: title
  *          schema:
  *            type: string
- *          description: Dish title
+ *          description: Ingredient title
  *      responses:
  *        "200":
  *          description: OK
@@ -97,17 +95,16 @@ module.exports = router;
  *                  results:
  *                    type: array
  *                    items:
- *                      $ref: '#/components/schemas/Dish'
+ *                      $ref: '#/components/schemas/Ingredient'
  */
-
 /**
  * @swagger
  * path:
- *  /dishes/{id}:
+ *  /ingredientes/{id}:
  *    get:
- *      summary: Get a dish
- *      description: Logged in cooks can fetch only their own dish information. Only admins can fetch other dishs.
- *      tags: [Dishes]
+ *      summary: Get a ingredient
+ *      description: Logged in cooks can fetch only their own ingredient information. Only admins can fetch other ingredients.
+ *      tags: [Ingredientes]
  *      security:
  *        - bearerAuth: []
  *      parameters:
@@ -116,14 +113,14 @@ module.exports = router;
  *          required: true
  *          schema:
  *            type: string
- *          description: Dish id
+ *          description: Ingredient id
  *      responses:
  *        "200":
  *          description: OK
  *          content:
  *            application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Dish'
+ *                 $ref: '#/components/schemas/Ingredient'
  *        "401":
  *          $ref: '#/components/responses/Unauthorized'
  *        "403":
@@ -132,9 +129,9 @@ module.exports = router;
  *          $ref: '#/components/responses/NotFound'
  *
  *    patch:
- *      summary: Update a dish
- *      description: Logged in dishs can only update their own information. Only admins can update other dishs.
- *      tags: [Dishes]
+ *      summary: Update a ingredient
+ *      description: Logged in ingredients can only update their own information. Only admins can update other ingredients.
+ *      tags: [Ingredientes]
  *      security:
  *        - bearerAuth: []
  *      parameters:
@@ -143,7 +140,7 @@ module.exports = router;
  *          required: true
  *          schema:
  *            type: string
- *          description: Dish id
+ *          description: Ingredient id
  *      requestBody:
  *        required: true
  *        content:
@@ -156,22 +153,19 @@ module.exports = router;
  *                  description: must be unique
  *                subtitle:
  *                  type: string
- *                description:
- *                  type: string
  *                imageUrl:
  *                  type: string
  *              example:
- *                title: Pizza
- *                subtitle: American style
- *                description: American style pizza is awesome
- *                imageUrl: https://banner2.cleanpng.com/20171220/oqe/pizza-png-image-5a3ab839564e57.89039813151379768935351034.jpg
+ *                title: Tomato
+ *                subtitle: It's red
+ *                imageUrl: https://png.pngtree.com/png-clipart/20190925/original/pngtree-red-tomato-png-image_4983241.jpg
  *      responses:
  *        "200":
  *          description: OK
  *          content:
  *            application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Dish'
+ *                 $ref: '#/components/schemas/Ingredient'
  *        "401":
  *          $ref: '#/components/responses/Unauthorized'
  *        "403":
@@ -180,9 +174,9 @@ module.exports = router;
  *          $ref: '#/components/responses/NotFound'
  *
  *    delete:
- *      summary: Delete a dish
- *      description: Logged in dishs can delete only themselves. Only admins can delete other dishs.
- *      tags: [Dishes]
+ *      summary: Delete a ingredient
+ *      description: Logged in ingredients can delete only themselves. Only admins can delete other ingredients.
+ *      tags: [Ingredientes]
  *      security:
  *        - bearerAuth: []
  *      parameters:
@@ -191,7 +185,7 @@ module.exports = router;
  *          required: true
  *          schema:
  *            type: string
- *          description: Dish id
+ *          description: Ingredient id
  *      responses:
  *        "200":
  *          description: No content
